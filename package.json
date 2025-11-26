@@ -17,10 +17,11 @@
     "@blaxel/core": "0.2.48",
     "@blaxel/telemetry": "0.2.48",
     "@blaxel/vercel": "0.2.48",
+    "@fastify/cors": "^11.1.0",
     "@opentelemetry/instrumentation-fastify": "^0.45.0",
     "ai": "^5.0.82",
     "axios": "^1.13.1",
-    "fastify": "^5.6.1",
+    "fastify": "^5.6.2",
     "turndown": "^7.2.0",
     "zod": "^4.1.12"
   },
