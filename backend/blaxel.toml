@@ -1,0 +1,4 @@
+type = "agent"
+
+functions = ["blaxel-search"]
+models = ["sandbox-openai"]
