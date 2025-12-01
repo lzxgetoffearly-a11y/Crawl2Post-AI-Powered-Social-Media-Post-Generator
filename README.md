@@ -1,14 +1,9 @@
 
 ---
 
-# AI Social & Chatbot Templates – Combined README
+# Crawl2Post: AI-Powered Social Media Post Generator
 
-This repository combines two powerful AI templates:
-
-1. **Blaxel Social Post Generator Agent** – Automatically generates professional social media posts from URLs or themes.
-2. **Nuxt AI Chatbot Template** – A full-featured AI chat application with authentication, chat history, model switching, and more.
-
-You can use them independently or integrate both to build a unified platform that provides **content generation + conversational interaction**.
+This repository provides a powerful AI-driven solution for automatically generating social media posts from URLs or themes. It integrates **Web Crawling**, **Semantic Analysis**, and **AI Content Generation** to create engaging posts tailored for platforms like Twitter, LinkedIn, and Instagram.
 
 ---
 
