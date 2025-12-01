@@ -1,6 +1,6 @@
 import { blModel } from "@blaxel/vercel";
 import { generateText } from "ai";
-import fs from "fs";
+import * as fs from "fs";
 
 interface Stream {
   write: (data: string) => void;
