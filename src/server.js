@@ -54,31 +54,63 @@ function main() {
                         })];
                 case 1:
                     _a.sent();
-                    // POST /api/ai
                     app.post("/ai", function (req, reply) { return __awaiter(_this, void 0, void 0, function () {
-                        var input, resultText, errorText, err_1;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        var input, buffer, err_1;
+                        var _this = this;
+                        var _a, _b;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
                                 case 0:
                                     input = req.body.input;
-                                    resultText = "";
-                                    errorText = "";
-                                    _a.label = 1;
+                                    reply
+                                        .header("Content-Type", "text/event-stream")
+                                        .header("Cache-Control", "no-cache, no-transform")
+                                        .header("Connection", "keep-alive");
+                                    (_b = (_a = reply.raw).flushHeaders) === null || _b === void 0 ? void 0 : _b.call(_a); // 重要，保证浏览器马上进入流式
+                                    buffer = "";
+                                    _c.label = 1;
                                 case 1:
-                                    _a.trys.push([1, 3, , 4]);
+                                    _c.trys.push([1, 3, , 4]);
                                     return [4 /*yield*/, (0, agent_1.default)(input, {
-                                            write: function (chunk) { resultText += chunk; },
-                                            end: function () { },
+                                            write: function (chunk) {
+                                                buffer += chunk;
+                                            },
+                                            end: function () { return __awaiter(_this, void 0, void 0, function () {
+                                                var _i, buffer_1, ch;
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0:
+                                                            _i = 0, buffer_1 = buffer;
+                                                            _a.label = 1;
+                                                        case 1:
+                                                            if (!(_i < buffer_1.length)) return [3 /*break*/, 4];
+                                                            ch = buffer_1[_i];
+                                                            reply.raw.write("data: ".concat(JSON.stringify({ result: ch, error: "" }), "\n\n"));
+                                                            return [4 /*yield*/, new Promise(function (res) { return setTimeout(res, 25); })];
+                                                        case 2:
+                                                            _a.sent(); // 控制速度
+                                                            _a.label = 3;
+                                                        case 3:
+                                                            _i++;
+                                                            return [3 /*break*/, 1];
+                                                        case 4:
+                                                            reply.raw.write("data: ".concat(JSON.stringify({ error: "[DONE]" }), "\n\n"));
+                                                            reply.raw.end();
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            }); }
                                         })];
                                 case 2:
-                                    _a.sent();
+                                    _c.sent();
                                     return [3 /*break*/, 4];
                                 case 3:
-                                    err_1 = _a.sent();
-                                    console.error("Server caught agent error:", err_1);
-                                    errorText = (err_1 === null || err_1 === void 0 ? void 0 : err_1.message) || "Unknown server error";
+                                    err_1 = _c.sent();
+                                    reply.raw.write("data: ".concat(JSON.stringify({ error: (err_1 === null || err_1 === void 0 ? void 0 : err_1.message) || "Unknown error" }), "\n\n"));
+                                    reply.raw.write("data: ".concat(JSON.stringify({ error: "[DONE]" }), "\n\n"));
+                                    reply.raw.end();
                                     return [3 /*break*/, 4];
-                                case 4: return [2 /*return*/, { result: resultText, error: errorText }];
+                                case 4: return [2 /*return*/];
                             }
                         });
                     }); });

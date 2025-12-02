@@ -11,24 +11,35 @@ async function main() {
     allowedHeaders: ["Content-Type"],
   });
 
-  // POST /api/ai
   app.post("/ai", async (req, reply) => {
     const { input } = req.body as { input: string };
 
-    let resultText = "";
-    let errorText = "";
+    reply
+      .header("Content-Type", "text/event-stream")
+      .header("Cache-Control", "no-cache")
+      .header("Connection", "keep-alive");
+
+    // 发送初始空行保证前端可以立即开始监听
+    reply.raw.write("\n");
 
     try {
       await agent(input, {
-        write: (chunk: string) => { resultText += chunk; },
-        end: () => {},
+        write: (chunk: string) => {
+          // 每次写入都是一个 JSON 对象，前端解析时安全
+          const payload = JSON.stringify({ result: chunk, error: "" });
+          reply.raw.write(`data: ${payload}\n\n`);
+        },
+        end: () => {
+          reply.raw.write(`data: ${JSON.stringify({ result: "", error: "[DONE]" })}\n\n`);
+          reply.raw.end();
+        },
       });
     } catch (err: any) {
-      console.error("Server caught agent error:", err);
-      errorText = err?.message || "Unknown server error";
+      const payload = JSON.stringify({ result: "", error: err?.message || "Unknown server error" });
+      reply.raw.write(`data: ${payload}\n\n`);
+      reply.raw.write(`data: ${JSON.stringify({ result: "", error: "[DONE]" })}\n\n`);
+      reply.raw.end();
     }
-
-    return { result: resultText, error: errorText };
   });
 
   await app.listen({ port: 1338, host: "0.0.0.0" });

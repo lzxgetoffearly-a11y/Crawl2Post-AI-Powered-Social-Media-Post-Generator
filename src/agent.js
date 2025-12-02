@@ -35,6 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = agent;
 var vercel_1 = require("@blaxel/vercel");
@@ -42,32 +49,66 @@ var ai_1 = require("ai");
 var fs = require("fs");
 function agent(input, stream) {
     return __awaiter(this, void 0, void 0, function () {
-        var system, model, response, err_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var system, model, response, _a, _b, _c, chunk, e_1_1, err_1;
+        var _d, e_1, _e, _f;
+        return __generator(this, function (_g) {
+            switch (_g.label) {
                 case 0:
-                    _a.trys.push([0, 3, , 4]);
+                    _g.trys.push([0, 15, , 16]);
                     console.log("Agent received input:", input);
                     system = fs.readFileSync("./src/prompt.md", "utf8");
                     return [4 /*yield*/, (0, vercel_1.blModel)("sandbox-openai")];
                 case 1:
-                    model = _a.sent();
-                    return [4 /*yield*/, (0, ai_1.generateText)({
-                            model: model,
-                            prompt: "".concat(system, "\n\nUser: ").concat(input),
+                    model = _g.sent();
+                    return [4 /*yield*/, (0, ai_1.streamText)({
+                            model: model, // ✔️ 此时类型匹配 LanguageModel
+                            prompt: "".concat(system, "\n\nUser: ").concat(input)
                         })];
                 case 2:
-                    response = _a.sent();
-                    stream.write(response.text);
-                    stream.end();
-                    return [3 /*break*/, 4];
+                    response = _g.sent();
+                    _g.label = 3;
                 case 3:
-                    err_1 = _a.sent();
+                    _g.trys.push([3, 8, 9, 14]);
+                    _a = true, _b = __asyncValues(response.textStream);
+                    _g.label = 4;
+                case 4: return [4 /*yield*/, _b.next()];
+                case 5:
+                    if (!(_c = _g.sent(), _d = _c.done, !_d)) return [3 /*break*/, 7];
+                    _f = _c.value;
+                    _a = false;
+                    chunk = _f;
+                    stream.write(chunk);
+                    _g.label = 6;
+                case 6:
+                    _a = true;
+                    return [3 /*break*/, 4];
+                case 7: return [3 /*break*/, 14];
+                case 8:
+                    e_1_1 = _g.sent();
+                    e_1 = { error: e_1_1 };
+                    return [3 /*break*/, 14];
+                case 9:
+                    _g.trys.push([9, , 12, 13]);
+                    if (!(!_a && !_d && (_e = _b.return))) return [3 /*break*/, 11];
+                    return [4 /*yield*/, _e.call(_b)];
+                case 10:
+                    _g.sent();
+                    _g.label = 11;
+                case 11: return [3 /*break*/, 13];
+                case 12:
+                    if (e_1) throw e_1.error;
+                    return [7 /*endfinally*/];
+                case 13: return [7 /*endfinally*/];
+                case 14:
+                    stream.end();
+                    return [3 /*break*/, 16];
+                case 15:
+                    err_1 = _g.sent();
                     console.error("🔥 AGENT ERROR:", err_1);
                     stream.write("\uD83D\uDD25 AGENT ERROR: ".concat(err_1 === null || err_1 === void 0 ? void 0 : err_1.message));
                     stream.end();
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    return [3 /*break*/, 16];
+                case 16: return [2 /*return*/];
             }
         });
     });

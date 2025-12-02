@@ -1,5 +1,5 @@
 import { blModel } from "@blaxel/vercel";
-import { generateText } from "ai";
+import { streamText } from "ai";
 import * as fs from "fs";
 
 interface Stream {
@@ -12,14 +12,20 @@ export default async function agent(input: string, stream: Stream) {
     console.log("Agent received input:", input);
 
     const system = fs.readFileSync("./src/prompt.md", "utf8");
+
+    // ⚠️ 必须 await，否则类型是 Promise<LanguageModelV2>
     const model = await blModel("sandbox-openai");
 
-    const response = await generateText({
-      model,
-      prompt: `${system}\n\nUser: ${input}`,
+    const response = await streamText({
+      model, // ✔️ 此时类型匹配 LanguageModel
+      prompt: `${system}\n\nUser: ${input}`
     });
 
-    stream.write(response.text);
+    // ✔️ 正确流式迭代
+    for await (const chunk of response.textStream) {
+      stream.write(chunk);
+    }
+
     stream.end();
   } catch (err: any) {
     console.error("🔥 AGENT ERROR:", err);
@@ -27,4 +33,3 @@ export default async function agent(input: string, stream: Stream) {
     stream.end();
   }
 }
-
