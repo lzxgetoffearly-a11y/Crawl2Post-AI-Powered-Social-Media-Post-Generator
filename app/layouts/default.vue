@@ -54,7 +54,7 @@ const items = computed(() => groups.value?.flatMap((group) => {
   }))]
 }))
 
-async function deleteChat(id: string) {
+/* async function deleteChat(id: string) {
   const instance = deleteModal.open()
   const result = await instance.result
   if (!result) {
@@ -74,7 +74,7 @@ async function deleteChat(id: string) {
   if (route.params.id === id) {
     navigateTo('/')
   }
-}
+} */
 
 defineShortcuts({
   c: () => {
@@ -128,7 +128,7 @@ defineShortcuts({
           orientation="vertical"
           :ui="{ link: 'overflow-hidden' }"
         >
-          <template #chat-trailing="{ item }">
+          <!-- <template #chat-trailing="{ item }">
             <div class="flex -mr-1.25 translate-x-full group-hover:translate-x-0 transition-transform">
               <UButton
                 icon="i-lucide-x"
@@ -140,7 +140,7 @@ defineShortcuts({
                 @click.stop.prevent="deleteChat((item as any).id)"
               />
             </div>
-          </template>
+          </template> -->
         </UNavigationMenu>
       </template>
 

@@ -30,13 +30,13 @@ function goQuick(text: string) {
 }
 
 const quickChats = [
-  { label: 'Why use Nuxt UI?', icon: 'i-logos-nuxt-icon' },
-  { label: 'Help me create a Vue composable', icon: 'i-logos-vue' },
+  { label: 'Macau University of Science and Technology', icon: 'i-logos-nuxt-icon' },
+  { label: 'How to recommend a restaurant?', icon: 'i-logos-vue' },
   { label: 'Tell me more about UnJS', icon: 'i-logos-unjs' },
-  { label: 'Why should I consider VueUse?', icon: 'i-logos-vueuse' },
-  { label: 'Tailwind CSS best practices', icon: 'i-logos-tailwindcss-icon' },
+  { label: 'Why should I consider Craw2Post?', icon: 'i-logos-vueuse' },
+  { label: 'Best Movie in 2025', icon: 'i-logos-tailwindcss-icon' },
   { label: 'What is the weather in Bordeaux?', icon: 'i-lucide-sun' },
-  { label: 'Show me a chart of sales data', icon: 'i-lucide-line-chart' }
+  { label: 'Generata a copy of skating', icon: 'i-lucide-line-chart' }
 ]
 
 function goPreview() {
@@ -87,7 +87,7 @@ function goPreview() {
 
         <div class="mt-8">
           <UButton
-            label="进入素材预览生成器"
+            label="Theme Preview Generator"
             icon="i-lucide-arrow-right"
             size="lg"
             variant="soft"

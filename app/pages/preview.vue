@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 
 /* 文案内容 */
 const postData = reactive({
@@ -13,8 +13,8 @@ const images = ref([])
 /* 主 tabs */
 const currentMainTab = ref('xiaohongshu')
 const mainTabs = [
-  { id: 'xiaohongshu', name: '小红书预览 (首页流 & 发布页)' },
-  { id: 'wechat', name: '朋友圈预览 (详情页 & 个人页)' }
+  { id: 'xiaohongshu', name: 'RedNote Preview (Home Page & Publish Page)' },
+  { id: 'wechat', name: 'WeChat Moments Preview (Detail Page & Profile Page)' }
 ]
 
 /* 文件上传 */
@@ -46,25 +46,25 @@ const getGridClass = (count) => {
 <div id="app" class="flex h-full">
 
     <div class="w-[400px] flex-shrink-0 border-r border-gray-200 bg-white flex flex-col p-8 h-full overflow-y-auto z-20 shadow-xl">
-        <h2 class="text-2xl font-bold mb-6 text-black">输入文案</h2>
+        <h2 class="text-2xl font-bold mb-6 text-black">Input Copy</h2>
         
         <div class="mb-8">
             <textarea 
                 v-model="postData.content"
                 class="w-full h-48 p-4 border border-gray-300 rounded-xl text-base focus:ring-2 focus:ring-black focus:border-black outline-none resize-none placeholder-gray-400 shadow-sm"
-                placeholder="在此输入文案..."
+                placeholder="Enter your copy here..."
             ></textarea>
         </div>
 
-        <h2 class="text-xl font-bold mb-4 text-black">上传图片</h2>
+        <h2 class="text-xl font-bold mb-4 text-black">Upload Images</h2>
         
         <div class="flex flex-col gap-4">
             <div class="flex items-center gap-3">
                 <label class="px-6 py-3 bg-gray-100 border border-gray-300 rounded-lg text-sm font-bold cursor-pointer hover:bg-gray-200 transition">
-                    选择文件
+                    Select Files
                     <input type="file" multiple accept="image/*" class="hidden" @change="handleFileUpload">
                 </label>
-                <span class="text-sm text-gray-500 font-medium">{{ images.length > 0 ? `已选 ${images.length} 张` : '未选择文件' }}</span>
+                <span class="text-sm text-gray-500 font-medium">{{ images.length > 0 ? `Selected ${images.length} images` : 'No files selected' }}</span>
             </div>
 
             <div class="grid grid-cols-3 gap-3 mt-2">
@@ -96,7 +96,7 @@ const getGridClass = (count) => {
             <div v-if="currentMainTab === 'xiaohongshu'" class="flex gap-20 items-start p-5">
                 
                 <div class="transform scale-[1.25] origin-top-left flex-shrink-0 w-[420px] mt-8">
-                    <div class="text-sm font-bold text-gray-800 mb-4 ml-4">首页流 (双列瀑布流) 预览</div>
+                    <div class="text-sm font-bold text-gray-800 mb-4 ml-4">Home Page (Two-column Waterfall) Preview</div>
                     
                     <div class="iphone-frame w-[360px] h-[720px]">
                         <div class="dynamic-island"></div>
@@ -108,9 +108,9 @@ const getGridClass = (count) => {
                         <div class="absolute inset-0 pt-10 px-2 pb-5 overflow-y-auto hide-scrollbar bg-white">
                             <div class="sticky top-0 bg-white pt-2 pb-2 z-10">
                                 <div class="flex items-center justify-center mb-3 text-lg font-bold">
-                                    <span class="text-gray-900 mx-2">关注</span>
-                                    <span class="text-black mx-2 border-b-2 border-black">发现</span>
-                                    <span class="text-gray-500 mx-2">附近</span>
+                                    <span class="text-gray-900 mx-2">Following</span>
+                                    <span class="text-black mx-2 border-b-2 border-black">Discover</span>
+                                    <span class="text-gray-500 mx-2">Nearby</span>
                                 </div>
                             </div>
 
@@ -119,11 +119,11 @@ const getGridClass = (count) => {
                                     <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 pb-2">
                                         <div class="aspect-[3/4] bg-gray-100 relative">
                                             <img v-if="images.length" :src="images[0]" class="w-full h-full object-cover">
-                                            <div v-else class="flex items-center justify-center h-full text-gray-300 text-xs">图片预览</div>
+                                            <div v-else class="flex items-center justify-center h-full text-gray-300 text-xs">Image Preview</div>
                                         </div>
                                         <div class="px-2 pt-2">
                                             <div class="text-[11px] font-bold text-gray-900 line-clamp-2 leading-snug mb-1">
-                                                {{ postData.content || '文案预览区域...' }}
+                                                {{ postData.content || 'Copy Preview Area...' }}
                                             </div>
                                             <div class="flex justify-between items-center text-[9px] text-gray-500">
                                                 <div class="flex items-center gap-1">
@@ -138,7 +138,7 @@ const getGridClass = (count) => {
                                         <div class="aspect-[3/4] bg-gray-300 relative">
                                             <img src="https://picsum.photos/seed/xhs-a/300/400" class="w-full h-full object-cover">
                                         </div>
-                                        <div class="px-2 pt-2"><div class="text-[11px] font-bold text-gray-900 line-clamp-2">模拟其他帖子标题</div></div>
+                                        <div class="px-2 pt-2"><div class="text-[11px] font-bold text-gray-900 line-clamp-2">Simulated Other Post Title</div></div>
                                     </div>
                                 </div>
                                 
@@ -147,13 +147,13 @@ const getGridClass = (count) => {
                                         <div class="aspect-[3/4] bg-gray-300 relative">
                                             <img src="https://picsum.photos/seed/xhs-b/300/500" class="w-full h-full object-cover">
                                         </div>
-                                        <div class="px-2 pt-2"><div class="text-[11px] font-bold text-gray-900 line-clamp-2">模拟其他帖子标题</div></div>
+                                        <div class="px-2 pt-2"><div class="text-[11px] font-bold text-gray-900 line-clamp-2">Simulated Other Post Title</div></div>
                                     </div>
                                     <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 pb-2">
                                         <div class="aspect-[3/4] bg-gray-300 relative">
                                             <img src="https://picsum.photos/seed/xhs-c/300/450" class="w-full h-full object-cover">
                                         </div>
-                                        <div class="px-2 pt-2"><div class="text-[11px] font-bold text-gray-900 line-clamp-2">另一个热门帖子</div></div>
+                                        <div class="px-2 pt-2"><div class="text-[11px] font-bold text-gray-900 line-clamp-2">Another Popular Post</div></div>
                                     </div>
                                 </div>
                             </div>
@@ -162,7 +162,7 @@ const getGridClass = (count) => {
                 </div>
 
                 <div class="transform scale-[1.25] origin-top-left flex-shrink-0 w-[420px] mt-8">
-                    <div class="text-sm font-bold text-gray-800 mb-4 ml-4">发布页 (详情页) 预览</div>
+                    <div class="text-sm font-bold text-gray-800 mb-4 ml-4">Publish Page (Detail Page) Preview</div>
                     <div class="iphone-frame w-[360px] h-[720px] bg-white">
                         <div class="dynamic-island"></div>
                         <div class="absolute top-0 w-full h-10 flex items-center justify-between px-4 text-xs font-medium z-10 text-white">
@@ -174,16 +174,16 @@ const getGridClass = (count) => {
                             
                             <div class="aspect-[3/4] bg-[#222] relative flex items-center justify-center overflow-hidden">
                                 <img v-if="images.length > 0" :src="images[0]" class="w-full h-full object-cover">
-                                <div v-else class="text-gray-500 text-sm">封面预览</div>
+                                <div v-else class="text-gray-500 text-sm">Cover Preview</div>
                             </div>
 
                             <div class="p-5 min-h-[140px] flex flex-col justify-between">
                                 <div>
                                     <h3 class="font-bold text-white text-lg mb-2 leading-snug">
-                                        {{ postData.content ? postData.content.substring(0, 20) : '2025年怎么过这么快' }}...
+                                        {{ postData.content ? postData.content.substring(0, 20) : 'How is 2025 passing so fast' }}...
                                     </h3>
                                     <div class="text-red-400 text-xs mb-4 font-medium">
-                                        #示例标签 #小红书排版
+                                        #ExampleTag #XiaohongshuLayout
                                     </div>
                                 </div>
 

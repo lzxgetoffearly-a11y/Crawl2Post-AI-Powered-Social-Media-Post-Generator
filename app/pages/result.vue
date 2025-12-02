@@ -15,6 +15,8 @@ const components = { pre: ProseStreamPre as unknown as DefineComponent }
 
 function goPreview() { router.push('/preview') }
 
+let loadingInterval: any = null
+
 // SSE 流式请求，每个字符逐字输出
 async function callAI(msg: string, onChar: (char: string) => void) {
   const res = await fetch('http://localhost:1338/ai', {
@@ -35,7 +37,7 @@ async function callAI(msg: string, onChar: (char: string) => void) {
     const lines = chunk.split("\n").map(l => l.trim()).filter(Boolean)
 
     for (const line of lines) {
-      let dataLine = line.startsWith("data: ") ? line.replace(/^data: /, "") : line
+      const dataLine = line.startsWith("data: ") ? line.replace(/^data: /, "") : line
       try {
         const data = JSON.parse(dataLine)
         if (data.error === "[DONE]") continue
@@ -57,8 +59,7 @@ async function writeChars(text: string, onChar: (char: string) => void) {
   }
 }
 
-
-// 发送消息并更新 UI
+// 发送消息并更新 UI，带动态 Loading
 async function sendMessage(msg: string) {
   if (!msg.trim()) return
 
@@ -69,16 +70,37 @@ async function sendMessage(msg: string) {
     parts: [{ type: 'text', text: msg }]
   })
 
-  // 助手消息
+  // 助手消息，初始化显示占位提示
   const assistantMsg = {
     id: `assistant-${Date.now()}`,
     role: 'assistant',
-    parts: [{ type: 'text', text: "" }]
+    parts: [{ type: 'text', text: "Getting Result" }]
   }
   chat.value.messages.push(assistantMsg)
 
+  // 等待微任务保证 Vue 渲染
+  await new Promise(r => setTimeout(r, 0))
+
+  // 开启动态 Loading 动画
+  let dotCount = 1
+  loadingInterval = setInterval(() => {
+    if (!assistantMsg.parts[0]) return
+    assistantMsg.parts = [{ type: 'text', text: `Getting Result${'.'.repeat(dotCount)}` }]
+    dotCount = dotCount < 3 ? dotCount + 1 : 1
+    chat.value = { ...chat.value }
+  }, 500)
+
   // 流式逐字更新
   await callAI(msg, (char) => {
+    // 停止 Loading 动画
+    if (loadingInterval) {
+      clearInterval(loadingInterval)
+      loadingInterval = null
+    }
+    // 如果当前显示还是提示词，先清空
+    if (assistantMsg.parts[0].text.startsWith("Getting Result")) {
+      assistantMsg.parts = [{ type: 'text', text: '' }]
+    }
     assistantMsg.parts = [{ type: 'text', text: assistantMsg.parts[0].text + char }]
   })
 }
@@ -125,7 +147,7 @@ onMounted(() => {
       <div class="fixed left-1/2 transform -translate-x-1/2 bg-white dark:bg-black p-4 border-t border-neutral-200 dark:border-neutral-800 rounded-t-xl shadow-lg" :style="{ bottom:'64px', maxWidth:'640px', width:'95%'}">
         <div class="flex justify-center mb-4">
           <UButton
-            label="进入素材预览生成器"
+            label="Theme Preview Generator"
             icon="i-lucide-arrow-right"
             size="lg"
             variant="soft"
